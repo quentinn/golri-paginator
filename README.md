@@ -1,1 +1,1 @@
-# Ajna
+# @quentinn/paginator
