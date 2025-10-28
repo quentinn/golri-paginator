@@ -6,7 +6,7 @@ import { usePaginationContext } from "../lib/hooks/usePaginationContext"
 
 export const PaginationPrevious: FC<ButtonProps> = ({
   children,
-  isDisabled: isDisabledProp,
+  disabled: disabledProp,
   ...buttonProps
 }) => {
   // provider
@@ -18,13 +18,13 @@ export const PaginationPrevious: FC<ButtonProps> = ({
   // memos
   const isFirst = useMemo(() => currentPage === 1, [currentPage])
   const isDisabled = useMemo(
-    () => isFirst || (isDisabledProp ?? isDisabledGlobal),
-    [isFirst, isDisabledProp, isDisabledGlobal],
+    () => isFirst || (disabledProp ?? isDisabledGlobal),
+    [isFirst, disabledProp, isDisabledGlobal],
   )
   const allProps = useMemo(
     () => ({
       ...buttonProps,
-      isDisabled,
+      disabled: isDisabled,
     }),
     [buttonProps, isDisabled],
   )
@@ -32,15 +32,15 @@ export const PaginationPrevious: FC<ButtonProps> = ({
   // methods
   const getPreviousProps = ({
     onClick,
-    isDisabled,
+    disabled,
     ...props
   }: ButtonProps): ButtonProps => ({
     ...props,
     "aria-label": "Previous page",
-    "aria-disabled": isDisabled,
-    isDisabled,
+    "aria-disabled": disabled,
+    disabled,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
-      if (!isDisabled) {
+      if (!disabled) {
         onClick?.(event)
       }
 

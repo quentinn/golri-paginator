@@ -1,4 +1,4 @@
-import React, { FC, useMemo, MouseEvent } from "react"
+import React, { FC, useMemo, MouseEvent, useState } from "react"
 import { Button, Flex, ButtonProps, Icon, IconProps } from "@chakra-ui/react"
 
 // components
@@ -12,7 +12,7 @@ import { IconType, SeparatorPosition } from "../lib/types"
 type SeparatorProps = {
   hoverIcon?: IconType
   jumpSize?: number
-  isDisabled?: boolean
+  disabled?: boolean
   separatorPosition?: SeparatorPosition
 }
 
@@ -24,13 +24,6 @@ const separatorStyles: ButtonProps = {
   alignItems: "center",
   bg: "transparent",
   px: 1,
-  sx: {
-    _hover: {
-      ".call-to-action": {
-        opacity: 1,
-      },
-    },
-  },
 }
 
 const separatorIconStyles: IconProps = {
@@ -47,17 +40,19 @@ const separatorTransitionStyles: IconProps = {
   left: 0,
   right: 0,
   bottom: 0,
-  opacity: 0,
-  transition: "all  cubic-bezier(0.4, 1, 0.9, 0.6) 0.3s",
+  transition: "all cubic-bezier(0.4, 1, 0.9, 0.6) 0.3s",
 }
 
 export const PaginationSeparator: FC<SeparatorProps & ButtonProps> = ({
   hoverIcon,
   separatorPosition,
-  isDisabled: isDisabledProp,
+  disabled: disabledProp,
   jumpSize = INITIAL_VALUES.jumpSize,
   ...buttonProps
 }) => {
+  // local state for hover effect
+  const [isHovered, setIsHovered] = useState(false)
+
   // provider
   const { actions, state } = usePaginationContext()
   const { currentPage, pagesCount, isDisabled: isDisabledGlobal } = state
@@ -92,6 +87,7 @@ export const PaginationSeparator: FC<SeparatorProps & ButtonProps> = ({
     ...props,
     "aria-label": `Jump pages ${jumpingDirectionLabel}`,
     "aria-disabled": isDisabled,
+    disabled: isDisabled,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       if (!isDisabled) {
         onClick?.(event)
@@ -106,8 +102,8 @@ export const PaginationSeparator: FC<SeparatorProps & ButtonProps> = ({
 
   // memos
   const isDisabled = useMemo(
-    () => !canJump || (isDisabledProp ?? isDisabledGlobal),
-    [canJump, isDisabledProp, isDisabledGlobal],
+    () => !canJump || (disabledProp ?? isDisabledGlobal),
+    [canJump, disabledProp, isDisabledGlobal],
   )
 
   const jumpingDirectionLabel = useMemo(
@@ -134,13 +130,18 @@ export const PaginationSeparator: FC<SeparatorProps & ButtonProps> = ({
 
   return (
     <Flex as="li">
-      <Button className="pagination-separator" {...getSeparatorProps(allProps)}>
+      <Button
+        className="pagination-separator"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        {...getSeparatorProps(allProps)}
+      >
         <Icon as={FiMoreHorizontal} {...separatorIconStyles} />
         <Icon
           as={hoverIcon}
-          className="call-to-action"
           {...separatorIconStyles}
           {...separatorTransitionStyles}
+          opacity={isHovered ? 1 : 0}
         />
       </Button>
     </Flex>

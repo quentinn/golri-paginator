@@ -1,3 +1,5 @@
+import React from "react"
+
 // obtained from 'react-icons' library types
 interface IconBaseProps extends React.SVGAttributes<SVGElement> {
   children?: React.ReactNode
@@ -8,4 +10,4 @@ interface IconBaseProps extends React.SVGAttributes<SVGElement> {
 
 export type SeparatorPosition = "left" | "right"
 
-export type IconType = (props: IconBaseProps) => JSX.Element
+export type IconType = (props: IconBaseProps) => React.ReactElement

@@ -4,7 +4,7 @@ import { IconType, SeparatorPosition } from "../lib/types";
 type SeparatorProps = {
     hoverIcon?: IconType;
     jumpSize?: number;
-    isDisabled?: boolean;
+    disabled?: boolean;
     separatorPosition?: SeparatorPosition;
 };
 export declare const PaginationSeparator: FC<SeparatorProps & ButtonProps>;

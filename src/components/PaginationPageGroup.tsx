@@ -17,7 +17,7 @@ export const PaginationPageGroup: FC<PageGroupProps & StackProps> = ({
       direction={"row"}
       as="ol"
       className="pagination-page-group"
-      spacing={1}
+      gap={1}
       {...stackProps}
     >
       {Children.map(children, (child) => {

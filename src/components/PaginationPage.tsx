@@ -25,7 +25,7 @@ const buttonStyles: ButtonProps = {
 
 export const PaginationPage: FC<PageProps & ButtonProps> = ({
   page,
-  isDisabled: isDisabledProp,
+  disabled: disabledProp,
   separator,
   _current = {},
   ...buttonProps
@@ -38,16 +38,16 @@ export const PaginationPage: FC<PageProps & ButtonProps> = ({
   // methods
   const getPageProps = ({
     onClick,
-    isDisabled,
+    disabled,
     ...props
   }: ButtonProps): ButtonProps => ({
     ...props,
-    "aria-disabled": isDisabled,
+    "aria-disabled": disabled,
     "aria-current": isCurrent,
     "aria-label": pageLabel,
-    isDisabled,
+    disabled,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
-      if (!isDisabled) {
+      if (!disabled) {
         onClick?.(event)
       }
 
@@ -58,12 +58,12 @@ export const PaginationPage: FC<PageProps & ButtonProps> = ({
   // memos
   const isCurrent = useMemo(() => currentPage === page, [currentPage, page])
   const isDisabled = useMemo(
-    () => isDisabledProp ?? isDisabledGlobal,
-    [isDisabledGlobal, isDisabledProp],
+    () => disabledProp ?? isDisabledGlobal,
+    [isDisabledGlobal, disabledProp],
   )
   const isSeparatorDisabled = useMemo(
-    () => separator?.props?.isDisabled ?? isDisabledGlobal,
-    [isDisabledGlobal, separator?.props?.isDisabled],
+    () => separator?.props?.disabled ?? isDisabledGlobal,
+    [isDisabledGlobal, separator?.props?.disabled],
   )
   const currentStyles = useMemo(
     () => (isCurrent ? _current : {}),
@@ -80,7 +80,7 @@ export const PaginationPage: FC<PageProps & ButtonProps> = ({
       ...buttonStyles,
       ...buttonProps,
       ...currentStyles,
-      isDisabled,
+      disabled: isDisabled,
     }),
     [buttonProps, currentStyles, isDisabled],
   )
@@ -89,7 +89,7 @@ export const PaginationPage: FC<PageProps & ButtonProps> = ({
     return (
       <PaginationSeparator
         hoverIcon={FiChevronLeft}
-        isDisabled={isSeparatorDisabled}
+        disabled={isSeparatorDisabled}
         separatorPosition="left"
         {...(separator?.props ?? {})}
       />
@@ -100,7 +100,7 @@ export const PaginationPage: FC<PageProps & ButtonProps> = ({
     return (
       <PaginationSeparator
         hoverIcon={FiChevronRight}
-        isDisabled={isSeparatorDisabled}
+        disabled={isSeparatorDisabled}
         separatorPosition="right"
         {...(separator?.props ?? {})}
       />
